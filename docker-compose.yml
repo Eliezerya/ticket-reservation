@@ -1,0 +1,28 @@
+#docker file ketika membuat kontainer di docker file docker hanya mengkonfigusasi 1 sevice
+#jika disini bisa lebih dari satu service
+version: '3.1'
+services:
+  app:
+    container_name: api-reservasi-tiket
+    image: api-reservasi-tiket
+    build: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/reserfasi_tiket_db
+      - SPRING.JPA.HIBERNATE.DDL-AUTO=update
+      - SPRING.MVC.PATHMATCH.MATCHING-STRATEGY=ANT_PATH_MATCHER
+      - SPRING.JPA.PROPERTIES.HIBERNATE.FORMAT_SQL=true
+      - LOGGING.LEVEL.ORG.HIBERNATE.TYPE.DESCRIPTOR.SQL.BASICBINDER=TRACE
+      - LOGGING.LEVEL.ORG.HIBERNATE.SQL=DEBUG
+      - SPRING_JPA_PROPERTIES_HIBERNATE_GLOBALLY_QUOTED_IDENTIFIERS=true
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=POSTGRES
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=reserfasi_tiket_db
